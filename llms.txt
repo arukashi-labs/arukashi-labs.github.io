@@ -1,9 +1,6 @@
 # Arukashi
 
-> 屋号 Arukashi のサイト。いまは料理の通説を計算で確かめる研究 Cuisine Network を公開している。
+> 屋号 Arukashi のサイト。いまはトップページだけを公開している。研究（料理の通説を計算で確かめる Cuisine Network）と、制度のルールを全部の場合で確かめる道具は準備中。
 
+- トップ: https://arukashi.com/
 - 連絡先: hello@arukashi.com
-
-## サイト
-
-- [Cuisine Network](https://arukashi.com/cuisine-network/): 研究サイト。詳しい目次は [https://arukashi.com/cuisine-network/llms.txt](https://arukashi.com/cuisine-network/llms.txt)
