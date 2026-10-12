@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arukashi</title>
+<meta name="description" content="いまここにあるものを大切にする。">
+<meta property="og:title" content="Arukashi"><meta property="og:type" content="website"><meta property="og:url" content="https://arukashi.com/">
+<meta property="og:description" content="いまここにあるものを大切にする。"><meta property="og:image" content="https://arukashi.com/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://arukashi.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;800&family=Noto+Sans+JP:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+/* 左に読む列（左揃え）、右に動く立体（スクロールで開く）。読む文字の背景は無彩色だけ。色は印・線・図に使う */
+:root{--ground:#FCFCFC;--surface:#F3F3F3;--rule:#E1E1E1;--ink:#171717;--ink-muted:#606060;--main:#B63552;--on-main:#FFFFFF;--sub:#00C9D4;
+  --f-head:"Hanken Grotesk","Noto Sans JP",sans-serif;--f-body:"IBM Plex Sans","IBM Plex Sans JP",sans-serif;--f-num:"Roboto Mono",ui-monospace,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--ground:#101010;--surface:#1D1D1D;--rule:#2E2E2E;--ink:#EEEEEE;--ink-muted:#A4A4A4;--main:#FB8495;--on-main:#1A0E10;--sub:#00A8B3}}
+:root[data-theme="dark"]{color-scheme:dark;--ground:#101010;--surface:#1D1D1D;--rule:#2E2E2E;--ink:#EEEEEE;--ink-muted:#A4A4A4;--main:#FB8495;--on-main:#1A0E10;--sub:#00A8B3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.8;letter-spacing:.04em;word-break:auto-phrase}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--f-head);font-feature-settings:"palt";margin:0}
+.layout{display:grid;grid-template-columns:minmax(0,680px) minmax(0,1fr);gap:48px;max-width:1360px;margin:0 auto;padding-inline:32px}
+.side{position:relative}
+.side canvas{position:sticky;top:0;width:100%;height:100vh;display:block}
+
+/* 上の帯 */
+.topwrap{width:100%;padding-inline:clamp(20px,3vw,40px)}
+.top .sm{display:none}
+.topwrap .top{padding-block:20px}
+.top{display:flex;gap:20px;align-items:center;padding-block:28px 0;font-size:14px;color:var(--ink-muted);flex-wrap:wrap}
+.top b{font-family:var(--f-head);font-weight:800;font-size:18px;color:var(--ink);margin-right:20px}
+.topwrap .top{gap:24px}
+.top a{border-bottom:2px solid transparent;transition:border-color .25s,color .25s}
+.top a:hover{color:var(--ink);border-color:var(--main)}
+/* 最初の画面 */
+.hero{min-height:calc(100vh - 80px);display:grid;align-content:center;gap:20px;padding-block:48px}
+.logo{font-family:var(--f-head);font-weight:800;font-size:clamp(64px,10vw,128px);line-height:.95;letter-spacing:-.015em}
+.logo .dot{color:var(--main)}
+.yomi{font-family:var(--f-num);font-size:14px;letter-spacing:.3em;color:var(--ink-muted)}
+.lead{font-size:clamp(22px,2.6vw,30px);line-height:1.6;font-weight:500;max-width:22em;margin:8px 0 0}
+.ph{border-bottom:2px dashed var(--main);color:var(--ink-muted)}
+.scroll{font-family:var(--f-num);font-size:12px;letter-spacing:.2em;color:var(--ink-muted);display:flex;align-items:center;gap:10px;margin-top:24px}
+.scroll i{display:block;width:2px;height:36px;background:var(--rule);position:relative;overflow:hidden}
+.scroll i::after{content:"";position:absolute;left:0;top:-12px;width:2px;height:12px;background:var(--main);animation:drip 1.8s ease-in-out infinite}
+@keyframes drip{to{top:36px}}
+/* 章 */
+.sec{padding-block:112px;display:grid;gap:36px;border-top:1px solid var(--rule)}
+.sec .en{font-family:var(--f-num);font-size:12px;letter-spacing:.3em;color:var(--ink-muted);display:flex;align-items:center;gap:10px}
+.sec .en::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--main)}
+.sec h2{font-size:clamp(30px,4vw,42px);font-weight:800;letter-spacing:.03em;margin-top:-30px}
+/* 事業内容：地は無彩色。色は左の線と小さな図だけ */
+.biz{display:grid;gap:20px}
+.card{display:grid;grid-template-columns:72px 1fr;gap:20px;align-items:start;padding:22px 24px;border-radius:14px;background:var(--surface);border-left:5px solid var(--k);transition:transform .5s cubic-bezier(.2,1.5,.4,1)}
+.card:hover{transform:translateX(6px)}
+.card .k{font-family:var(--f-num);font-size:12px;letter-spacing:.2em;color:var(--ink-muted)}
+.card h3{font-size:24px;font-weight:800;line-height:1.45;margin:2px 0 8px}
+.card p{margin:0;font-size:15px;color:var(--ink-muted)}
+.card .go{color:var(--main);font-size:14px;display:inline-block;margin-top:8px}
+.card svg{width:72px;height:72px}
+/* 興味のあるもの */
+.likes{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.likes li{font-size:19px;font-weight:500;padding:10px 20px;border-radius:999px;border:1.5px solid var(--rule);background:var(--ground);transition:transform .45s cubic-bezier(.2,1.6,.4,1),border-color .3s}
+.likes li::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--rule);margin-right:10px;vertical-align:2px;transition:background .3s}
+.likes li.hot::before{background:var(--main)}
+.likes li:hover{transform:translateY(-4px) rotate(-1.5deg);border-color:var(--main)}
+.likes li:hover::before{background:var(--main)}
+.likes li.add{border-style:dashed;border-color:var(--main);color:var(--ink-muted)}
+/* 私について */
+.about{display:grid;gap:40px}
+.about h3{font-size:20px;font-weight:800;margin-bottom:6px}
+.mail{font-family:var(--f-num);font-size:clamp(22px,2.6vw,30px)}
+.mail::after{content:"";display:block;height:3px;width:2.2em;background:var(--main);margin-top:6px;transition:width .5s cubic-bezier(.2,1.4,.4,1)}
+.mail:hover::after{width:100%}
+footer{padding-block:48px 16vh;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink-muted)}
+/* 章が見えたら、下からふわっと出す（読める位置で止まる） */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,1.2,.4,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}.card,.likes li,.mail::after{transition:none}.scroll i::after{animation:none}}
+.note-line{margin:0;font-size:15px;color:var(--ink-muted)}
+.career h3{font-size:15px;color:var(--ink-muted)}.career p{margin:0;font-size:15px;color:var(--ink-muted)}
+.about-text{font-size:18px;line-height:1.95;display:grid;gap:18px}.about-text p{margin:0}.about-text .nw{display:inline-block}
+/* 名前：触れると、上下に裏返って読みが出る */
+.flip{position:relative;display:inline-grid;perspective:900px;cursor:default;outline:none;width:max-content}
+.flip .face{grid-area:1/1;backface-visibility:hidden;transition:transform .7s cubic-bezier(.2,1.25,.35,1);transform-origin:50% 55%}
+.flip .back{transform:rotateX(-180deg);font-family:var(--f-head);font-weight:800;letter-spacing:.02em;display:flex;align-items:center}
+.flip:hover .front,.flip:focus-visible .front,.flip.on .front{transform:rotateX(180deg)}
+.flip:hover .back,.flip:focus-visible .back,.flip.on .back{transform:rotateX(0)}
+@media (prefers-reduced-motion: reduce){.flip .face{transition:opacity .3s;transform:none!important}.flip .back{opacity:0}.flip:hover .front,.flip.on .front{opacity:0}.flip:hover .back,.flip.on .back{opacity:1}}
+/* スマホ：案内の帯 → 上に貼り付く図の帯 → 本文。最後に置いて、ほかの指定より優先させる */
+@media (max-width:960px){
+  .topwrap{padding-inline:20px}.topwrap .top{padding-block:14px;gap:14px;flex-wrap:nowrap;font-size:13.5px}
+  .top .lg{display:none}.top .sm{display:inline}
+  .layout{grid-template-columns:1fr;padding-inline:20px;gap:0}
+  .side{order:-1;position:sticky;top:0;height:42svh;z-index:2;background:var(--ground);margin-inline:-20px}
+  .side::after{content:"";position:absolute;left:0;right:0;bottom:-24px;height:24px;background:linear-gradient(var(--ground),transparent)}
+  .side canvas{position:relative;height:42svh}
+  /* 最初の画面＝案内の帯＋図の帯＋名前と一言で、ちょうど1画面 */
+  .hero{min-height:calc(100svh - 42svh - 50px);align-content:center;gap:14px;padding-block:4px 20px}
+  .hero .logo{font-size:clamp(60px,18vw,84px)}
+  .hero .scroll{margin-top:8px}
+  /* 仮説のカード：小さな図を上に回して、文の幅を広く */
+  .card{grid-template-columns:1fr;gap:8px;padding:18px 16px 18px 18px}
+  .card svg{width:44px;height:44px}
+  .card h3{font-size:21px}
+}
+.lead .nw,.card h3 .nw{display:inline-block}
+</style>
+</head>
+<body>
+<div class="topwrap"><nav class="top"><b>Arukashi</b><a href="#work">仮説</a><a href="#likes"><span class="lg">興味のあるもの</span><span class="sm">興味</span></a><a href="#about">私について</a><a href="#contact">連絡先</a></nav></div>
+<div class="layout">
+  <main>
+    
+    <section class="hero">
+      <div class="logo flip" tabindex="0" aria-label="Arukashi（あるかし）"><span class="face front">Arukashi<span class="dot">.</span></span><span class="face back" aria-hidden="true">あるかし<span class="dot">.</span></span></div>
+      <p class="lead"><span class="nw">いまここにあるものを</span><span class="nw">大切にする。</span></p>
+      <div class="scroll"><i></i>SCROLL</div>
+    </section>
+
+    <section class="sec reveal" id="work">
+      <span class="en">HYPOTHESES</span><h2>仮説</h2>
+      <div class="biz">
+        <div class="card" data-leaf="0" style="--k:var(--sub)"><svg viewBox="0 0 72 72" class="ico" data-k="0"></svg><div><span class="k">仮説 1</span><h3><span class="nw">言葉で書かれたルールは、</span><span class="nw">計算できる形に直せる。</span></h3><p>その形に直せば、全部の場合を確かめられる。条件が重なって初めて結論が変わる所も、見落とさない。</p><span class="go">取り組み：ルールを全部の場合で確かめる（準備中）</span></div></div>
+        <div class="card" data-leaf="1" style="--k:var(--main)"><svg viewBox="0 0 72 72" class="ico" data-k="1"></svg><div><span class="k">仮説 2</span><h3><span class="nw">曖昧さは、</span><span class="nw">なくせなくても、</span><span class="nw">数えられる。</span></h3><p>一つの読み方に決めず、読み方の候補を全部出す。結論が変わる曖昧さだけを、どれくらい確かかの数と一緒に示す。</p><span class="go">取り組み：文章から、ルールを読み取る（準備中）</span></div></div>
+        <div class="card" data-leaf="2" style="--k:var(--ink)"><svg viewBox="0 0 72 72" class="ico" data-k="2"></svg><div><span class="k">仮説 3</span><h3><span class="nw">料理の言い伝えも、</span><span class="nw">計算で確かめられる。</span></h3><p>熱の伝わり方や、たんぱく質が固まる速さから、通説が本当かを確かめる。</p><span class="go">取り組み：Cuisine Network（準備中）</span></div></div>
+      </div>
+    </section>
+
+    <section class="sec reveal" id="likes">
+      <span class="en">INTERESTS</span><h2>興味のあるもの</h2>
+      <ul class="likes"><li class="hot" data-br="0">形式手法</li><li data-br="1">決定論と統計</li><li class="hot" data-br="2">構造化</li><li data-br="3">制度とルール</li><li data-br="4">料理の科学</li><li data-br="5">書くための機械</li><li data-br="6">デザイン</li></ul>
+    </section>
+
+    <section class="sec reveal" id="about">
+      <span class="en">ABOUT</span><h2>私について</h2>
+      <div class="about">
+        <div class="about-text"><p><span class="nw">情報系出身の</span><span class="nw">エンジニアです。</span><br><span class="nw">モットーは</span><span class="nw">「問題は技術で</span><span class="nw">解決できる」。</span><br><span class="nw">なんにでも</span><span class="nw">興味を持てることが、</span><span class="nw">私の長所です。</span></p><p><span class="nw">お金だけじゃなく、</span><span class="nw">楽しいこと、</span><span class="nw">面白いこと、</span><span class="nw">驚かされること、</span><br><span class="nw">いろんなことを</span><span class="nw">味わいながら、</span><span class="nw">自分の仕事を</span><span class="nw">自分で作れるようになりたい。</span></p><p><span class="nw">まだ見ぬものが</span><span class="nw">世界をより良くすると信じて、</span><br><span class="nw">人と関わりながら、</span><span class="nw">ためになること、</span><span class="nw">価値のあることを</span><span class="nw">積み重ねていきます。</span></p></div>
+      </div>
+    </section>
+
+    <section class="sec reveal" id="contact">
+      <span class="en">CONTACT</span><h2>連絡先</h2>
+      <a class="mail" href="#">hello@arukashi.com</a>
+      <p class="note-line">スカウト、ご相談など、お気軽にご連絡ください。</p>
+    </section>
+    <footer>© 2026 Arukashi · 記録・データは CC BY 4.0 のもとで利用できます。</footer>
+  </main>
+  <aside class="side"><canvas id="lattice" aria-label="小さな四角でできた植物。マウスの位置で、見る向きが変わる。読み進めると、種から芽、葉、枝、つぼみ、花へと育つ"></canvas></aside>
+</div>
+
+<script>
+(()=>{
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelector('.flip').addEventListener('click',e=>e.currentTarget.classList.toggle('on'));
+// 章をふわっと出す
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>reduce?el.classList.add('in'):io.observe(el));
+
+// 同じ数の四角が、フェーズごとに形を変える（変態）。どの形も種と同じく、詰まった立体に光が当たる
+const cv=document.getElementById('lattice'),ctx=cv.getContext('2d');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const M=460,GA=Math.PI*(3-Math.sqrt(5));
+const nrm=v=>{const l=Math.hypot(...v)||1;return [v[0]/l,v[1]/l,v[2]/l]};
+const P=(p,n,c,tag)=>({p,n:nrm(n),c,tag});
+// 楕円体（表面と、中を少し）
+function ell(c,r,n,col,tag){const o=[];for(let i=0;i<n;i++){const t=(i+.5)/n,ph=Math.acos(1-2*t),th=i*GA,s=[Math.sin(ph)*Math.cos(th),Math.cos(ph),Math.sin(ph)*Math.sin(th)];
+  const k=i%5===0?0.7:1;o.push(P([c[0]+s[0]*r[0]*k,c[1]+s[1]*r[1]*k,c[2]+s[2]*r[2]*k],[s[0]/r[0],s[1]/r[1],s[2]/r[2]],col,tag))}return o}
+// しずく形（上がとがる）
+function drop(c,r,n,col,tag){const o=[];for(let i=0;i<n;i++){const t=(i+.5)/n,ph=Math.acos(1-2*t),th=i*GA,sy=Math.cos(ph),f=sy<0?1-0.75*Math.pow(-sy,1.6):1;
+  const s=[Math.sin(ph)*Math.cos(th)*f,sy,Math.sin(ph)*Math.sin(th)*f];o.push(P([c[0]+s[0]*r[0],c[1]+s[1]*r[1]*(sy<0?1.35:1),c[2]+s[2]*r[2]],[s[0]/r[0],s[1]/r[1],s[2]/r[2]],col,tag))}return o}
+// 先ほど細くなる管（枝）
+function tubeT(f,r0,r1,na,nr,col,tag){const o=[];for(let i=0;i<na;i++){const t=i/(na-1),r=r0+(r1-r0)*t,p=f(t),q=f(Math.min(1,t+0.01)),d=nrm([q[0]-p[0],q[1]-p[1],q[2]-p[2]]);
+  const a=nrm(Math.abs(d[1])<0.9?[-d[2],0,d[0]]:[1,0,0]),b=[d[1]*a[2]-d[2]*a[1],d[2]*a[0]-d[0]*a[2],d[0]*a[1]-d[1]*a[0]];
+  for(let j=0;j<nr;j++){const g=j/nr*Math.PI*2+i*0.7,nn=[a[0]*Math.cos(g)+b[0]*Math.sin(g),a[1]*Math.cos(g)+b[1]*Math.sin(g),a[2]*Math.cos(g)+b[2]*Math.sin(g)];
+    o.push(P([p[0]+nn[0]*r,p[1]+nn[1]*r,p[2]+nn[2]*r],nn,col,tag))}}return o}
+// 花びら：根元が細く、先が丸い。手前へ反る
+function petalS(L,W,curl,nu,nv,colf,tag){const o=[];const S=(u,v)=>{const w=W*Math.pow(Math.sin(Math.PI*(0.12+0.86*u)),0.55);return [v*w,-u*L,-curl*u*u*L*0.35+0.25*Math.abs(v)*w]};
+  for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const u=(i+.5)/nu,v=(j+.5)/nv*2-1,p=S(u,v),pu=S(u+0.01,v),pv=S(u,Math.min(1,v+0.02));
+    const du=[pu[0]-p[0],pu[1]-p[1],pu[2]-p[2]],dv=[pv[0]-p[0],pv[1]-p[1],pv[2]-p[2]];
+    o.push(P(p,[du[1]*dv[2]-du[2]*dv[1],du[2]*dv[0]-du[0]*dv[2],du[0]*dv[1]-du[1]*dv[0]],colf(u,v),tag))}return o}
+// 管（茎・枝）
+function tube(f,r,na,nr,col,tag){const o=[];for(let i=0;i<na;i++){const t=i/(na-1),p=f(t),q=f(Math.min(1,t+0.01)),d=nrm([q[0]-p[0],q[1]-p[1],q[2]-p[2]]);
+  const a=nrm(Math.abs(d[1])<0.9?[-d[2],0,d[0]]:[1,0,0]),b=[d[1]*a[2]-d[2]*a[1],d[2]*a[0]-d[0]*a[2],d[0]*a[1]-d[1]*a[0]];
+  for(let j=0;j<nr;j++){const g=j/nr*Math.PI*2+i*0.7,nn=[a[0]*Math.cos(g)+b[0]*Math.sin(g),a[1]*Math.cos(g)+b[1]*Math.sin(g),a[2]*Math.cos(g)+b[2]*Math.sin(g)];
+    o.push(P([p[0]+nn[0]*r,p[1]+nn[1]*r,p[2]+nn[2]*r],nn,col,tag))}}return o}
+// 葉の面（長さ方向に反り、葉脈で少し折れる）。nu×nv の点
+function leafS(L,W,bend,fold,nu,nv,colf,tagf){const o=[];const S=(u,v)=>{const w=W*Math.pow(Math.sin(Math.PI*Math.min(1,u*1.02)),0.85)*(1-0.3*u);return [v*w,-u*L,bend*u*u*L*0.3+fold*Math.abs(v)*w]};
+  for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const u=(i+.5)/nu,v=(j+.5)/nv*2-1,p=S(u,v),pu=S(u+0.01,v),pv=S(u,Math.min(1,v+0.02));
+    const du=[pu[0]-p[0],pu[1]-p[1],pu[2]-p[2]],dv=[pv[0]-p[0],pv[1]-p[1],pv[2]-p[2]];
+    o.push(P(p,[du[1]*dv[2]-du[2]*dv[1],du[2]*dv[0]-du[0]*dv[2],du[0]*dv[1]-du[1]*dv[0]],colf(u,v),tagf(u,v)))}return o}
+// 花びらの集まり（らせん）。open=0 で閉じたつぼみ、1 で開いた花
+function bloom(open,n,R,colf){const o=[];for(let i=0;i<n;i++){const u=Math.sqrt(i/n),th=i*GA,pet=0.6+0.4*Math.pow(Math.abs(Math.cos(5*th/2)),0.7),r=u*pet*R;
+  const lift=(1-open)*1.35+open*(0.2+0.3*u),hr=r*(0.4+0.6*open),x=Math.cos(th)*hr*Math.cos(lift*0.45),z=Math.sin(th)*hr*Math.cos(lift*0.45),y=-r*Math.sin(lift)*0.95;
+  o.push(P([x,y,z],[-x*Math.sin(lift),1,-z*Math.sin(lift)].map((v,k)=>k===1?-1:v),colf(i,u),'flower'))}return o}
+// 形ごとの向き（z: 画面の中での傾き、x・y: 奥行きの向き）と置き場所
+function place(arr,rz,rx,ry,dx,dy){const R=(v)=>{let [x,y,z]=v;let c=Math.cos(ry),s=Math.sin(ry);[x,z]=[x*c-z*s,x*s+z*c];c=Math.cos(rx);s=Math.sin(rx);[y,z]=[y*c-z*s,y*s+z*c];c=Math.cos(rz);s=Math.sin(rz);[x,y]=[x*c-y*s,x*s+y*c];return [x,y,z]};
+  return arr.map(q=>({...q,p:(v=>[v[0]+dx,v[1]+dy,v[2]])(R(q.p)),n:R(q.n)}))}
+const SHAPES=[
+  // 01 種：少し傾いたしずく形の粒（今の種）
+  place([...ell([0,0,0],[2.2,3.0,2.0],440,'ink','seed'),...ell([0,-2.9,0],[0.35,0.3,0.35],20,'ink','seed')],0.35,0.2,0,0,-5.2),
+  // 02 芽：根元から少し傾いて立ち、双葉が左右に開く
+  place([...tube(t=>[Math.sin(t*1.6)*0.6,-t*5.5,0],0.32,40,6,'sub','stem'),
+    ...place(leafS(3.2,1.3,0.6,0.25,10,10,()=> 'sub',()=>'c0'),1.25,0.25,0,0.6,-5.5),
+    ...place(leafS(3.0,1.2,0.6,0.25,10,10,()=> 'sub',()=>'c1'),-1.2,-0.2,0,0.6,-5.5)],-0.25,0,0.3,0,-0.6),
+  // 03 葉：大きく斜めに伸びた1枚。手前に反る。葉脈は暗く。根元・中ほど・先が道具・受託・研究
+  place([...leafS(10.5,3.4,0.9,0.35,24,18,(u,v)=>Math.abs(v)<0.09||((u*10)%1.9<0.12&&Math.abs(v)<0.8)?'mut':'sub',(u)=>'l'+(u<0.36?0:u<0.68?1:2)),
+    ...tube(t=>[0,t*1.6,0],0.22,8,4,'sub','stem')],0.62,0.5,0.3,-2.6,-0.6),
+  // 04 枝：左下から右上へ伸びる細い枝。左右に小枝を出し、先にしずく形の芽が7つ
+  (()=>{const f=t=>[-4.6+t*8.4,-0.5-t*8.8+Math.sin(t*Math.PI)*1.3,Math.sin(t*4)*0.4];const o=[...tubeT(f,0.42,0.14,46,5,'rule','br')];
+    for(let k=0;k<7;k++){const t=0.14+k*0.122,c=f(t),side=k%2?1:-1,ang=side*(0.75+0.15*(k%3)),len=1.1+0.25*(k%2);
+      const d=[Math.sin(ang),-Math.cos(ang),(k%3-1)*0.35],e=[c[0]+d[0]*len,c[1]+d[1]*len,c[2]+d[2]*len];
+      o.push(...tubeT(s=>[c[0]+d[0]*len*s,c[1]+d[1]*len*s,c[2]+d[2]*len*s],0.16,0.1,5,3,'rule','b'+k));
+      o.push(...place(drop([0,0,0],[0.42,0.62,0.42],26,(k===0||k===2)?'main':'sub','b'+k),ang,0,0,e[0]+d[0]*0.55,e[1]+d[1]*0.55))}
+    return o})(),
+  // 05 つぼみ：少し傾いた、ふくらんだしずく形。根元をがくが包む
+  place([...drop([0,0,0],[1.9,2.6,1.9],380,'main','bud'),
+    ...place(leafS(1.8,0.9,0.5,0.25,6,6,()=> 'sub',()=>'gaku'),2.4,0.5,0,0.7,1.9),
+    ...place(leafS(1.8,0.9,0.5,0.25,6,6,()=> 'sub',()=>'gaku'),-2.4,0.5,0,-0.7,1.9),
+    ...tube(t=>[Math.sin(t*1.2)*0.5,2.2+t*2.2,0],0.28,10,4,'sub','stem')],0.38,0.1,0,0,-5.4),
+  // 06 花：外の花びら5枚、内の花びら5枚、真ん中に芯。少し上を向いて、こちらへ開く
+  place([...[0,1,2,3,4].flatMap(k=>place(petalS(4.8,2.7,0.55,11,6,()=> 'main','flower'),k*1.2566,0.12,0,0,0)),
+    ...[0,1,2,3,4].flatMap(k=>place(petalS(2.8,1.5,0.9,6,4,()=> 'main','flower'),k*1.2566+0.63,0.25,0,0,-0.15)),
+    ...ell([0,0,-0.6],[1.0,1.0,0.7],40,'sub','flower')],0.15,-0.22,0.1,0.4,-6.0),
+];
+const fit=a=>{const o=[];for(let i=0;i<M;i++)o.push(a[Math.floor(i*a.length/M)]);return o.sort((p,q)=>q.p[1]-p.p[1]||p.p[0]-q.p[0])};
+const SH=SHAPES.map(fit);
+const NAMES=['種','芽','葉','枝','つぼみ','花'],SUBS=['まだ小さな、ひとつの問い','確かめ始める','道具・受託・研究で、1枚の葉','興味が、1本の枝に7つの芽','形になる手前','見て分かる形で、ひらく'];
+let W,H,DPR,phase=0,start=-1e9,hoverTag='';
+const cur=SH[0].map(q=>({p:[...q.p],n:[...q.n],c:q.c,tag:q.tag}));let fromP=cur.map(q=>[...q.p]),fromN=cur.map(q=>[...q.n]);
+function size(){DPR=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+size();addEventListener('resize',size);
+const anchors=[document.querySelector('.hero'),document.querySelector('#work'),document.querySelector('#work .card:nth-child(2)'),document.querySelector('#likes'),document.querySelector('#about'),document.querySelector('#contact')];
+function phaseNow(){const mid=innerHeight*0.55;let k=0;anchors.forEach((e,i)=>{if(e.getBoundingClientRect().top<mid)k=i});return k}
+function go(k){if(k===phase)return;fromP=cur.map(q=>[...q.p]);fromN=cur.map(q=>[...q.n]);phase=k;start=performance.now()}
+addEventListener('scroll',()=>go(phaseNow()),{passive:true});
+document.querySelectorAll('[data-leaf]').forEach(el=>{el.addEventListener('mouseenter',()=>hoverTag='l'+el.dataset.leaf);el.addEventListener('mouseleave',()=>hoverTag='')});
+document.querySelectorAll('[data-br]').forEach(el=>{el.addEventListener('mouseenter',()=>hoverTag='b'+el.dataset.br);el.addEventListener('mouseleave',()=>hoverTag='')});
+const cl=x=>Math.min(1,Math.max(0,x)),back=x=>{const c1=1.4,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+function rr(x,y,s,r){ctx.beginPath();ctx.roundRect(x-s/2,y-s/2,s,s,r)}
+function note(x,y,dx,dy,text,red){ctx.globalAlpha=1;ctx.strokeStyle=red?css('--main'):css('--ink-muted');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+dx,y+dy);ctx.stroke();
+  ctx.font='500 13px "IBM Plex Sans","IBM Plex Sans JP",sans-serif';const tw=ctx.measureText(text).width+16;let bx=x+dx+(dx<0?-tw:0),by=y+dy-14;bx=Math.max(8,Math.min(W-tw-8,bx));
+  ctx.fillStyle=css('--ground');ctx.strokeStyle=red?css('--main'):css('--rule');ctx.beginPath();ctx.roundRect(bx,by,tw,28,8);ctx.fill();ctx.stroke();ctx.fillStyle=css('--ink');ctx.fillText(text,bx+8,by+19)}
+const LIGHT=nrm([-0.5,-0.75,-0.55]);
+// 触れると、四角が少し散って、ばねのように元の形へ戻る。図をつかんで横に動かせば、視点が回り込む
+let camY=0,camX=0,orbit=0,drag=null;
+const spread=new Float32Array(M),near=new Float32Array(M);let mouse=null;
+// ふくらみ方：通った瞬間から動き出し、0.32秒でにゅっと広がる（なめらかに減速）。0.9秒でゆっくり戻る
+const env=dt=>dt<0?0:dt<320?Math.sin(dt/320*Math.PI/2):dt<1220?0.5+0.5*Math.cos((dt-320)/900*Math.PI):0;
+let burst=null,burstTag=null;
+// 図（四角がある範囲）に入った瞬間に反応する。出たら、また反応できるようにする
+let box=null,inside=false;
+// マウスが通った所の近くの四角が、通った向きから外へ、すーっとばらけて戻る（四角ごとに合図の時刻を持つ）
+const hT=new Float32Array(M),hV=new Float32Array(M),dir=Array.from({length:M},()=>[0,0]);
+let lastScr=[];
+cv.addEventListener('pointermove',e=>{if(drag!==null||reduce)return;const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,R=Math.min(W,H)*0.056*2.8;
+  for(let i=0;i<M;i++){const sp=lastScr[i];if(!sp)continue;const dx=sp[0]-x,dy=sp[1]-y,d=Math.hypot(dx,dy);if(d>R)continue;
+    const a=Math.pow(1-d/R,0.7);if(a>hT[i])hT[i]=a;const w=0.2*a,nx=dx/(d||1),ny=dy/(d||1);dir[i]=[dir[i][0]*(1-w)+nx*w,dir[i][1]*(1-w)+ny*w];
+    if(hV[i]<0.01)dir[i]=[nx,ny]}});
+let mPos=null,mMoved=0,tagFired=true;
+addEventListener('pointermove',e=>{mMoved=performance.now();tagFired=false;mPos=[e.clientX,e.clientY]});
+
+cv.style.touchAction='none';cv.style.cursor='grab';
+let elev=0,dragY=0;
+cv.addEventListener('pointerdown',e=>{drag=e.clientX;dragY=e.clientY;cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'});
+cv.addEventListener('pointermove',e=>{if(drag!==null){orbit+=(e.clientX-drag)*0.01;elev=Math.max(0,Math.min(70*Math.PI/180,elev+(e.clientY-dragY)*0.006));drag=e.clientX;dragY=e.clientY}});
+const endDrag=()=>{drag=null;cv.style.cursor='grab'};cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
+function frame(t){
+  const COL={ink:css('--ink'),sub:css('--sub'),main:css('--main'),rule:css('--rule'),mut:css('--ink-muted')},GROUND=css('--ground'),DARK=css('--ink');
+  const el=reduce?1:cl((t-start)/1200),tgt=SH[phase];
+  for(let i=0;i<M;i++){const st=cl(el*1.35-(i/M)*0.35),e=back(st);
+    for(let a=0;a<3;a++){cur[i].p[a]=fromP[i][a]+(tgt[i].p[a]-fromP[i][a])*e;cur[i].n[a]=fromN[i][a]+(tgt[i].n[a]-fromN[i][a])*cl(st)}
+    if(st>0.5){cur[i].c=tgt[i].c;cur[i].tag=tgt[i].tag}}
+  const unit=Math.min(W,H)*(W<700?0.062:0.056),cx=W/2,cy=H*0.5+5.6*unit;
+  camY+=(orbit-camY)*0.08;camX+=(elev-camX)*0.08;
+  if(!reduce&&hoverTag&&(!burstTag||burstTag.tag!==hoverTag))burstTag={tag:hoverTag,t};
+  if(!hoverTag&&burstTag&&t-burstTag.t>1220)burstTag=null;
+  {const dtm=Math.min(50,t-(frame.lt||t));frame.lt=t;const ku=1-Math.exp(-dtm/110),kd=1-Math.exp(-dtm/260);
+    for(let i=0;i<M;i++){hT[i]=Math.max(0,hT[i]-dtm/650);hV[i]+=(hT[i]-hV[i])*(hT[i]>hV[i]?ku:kd)}}
+  // 触れている所の真ん中を求め、そこから外へ広げる
+  let gc=[0,0,0],gn=0;if(hoverTag)for(let i=0;i<M;i++)if(cur[i].tag===hoverTag){gc[0]+=cur[i].p[0];gc[1]+=cur[i].p[1];gc[2]+=cur[i].p[2];gn++}
+  if(gn){gc=gc.map(v=>v/gn)}
+  if(burstTag){gc=[0,0,0];gn=0;for(let i=0;i<M;i++)if(cur[i].tag===burstTag.tag){gc[0]+=cur[i].p[0];gc[1]+=cur[i].p[1];gc[2]+=cur[i].p[2];gn++}if(gn)gc=gc.map(v=>v/gn)}
+  const ev=burstTag?env(t-burstTag.t):0;for(let i=0;i<M;i++)spread[i]=burstTag&&cur[i].tag===burstTag.tag?ev:0;
+  const ry=(reduce?0:Math.sin(t/4200)*0.18)+camY,cs=Math.cos(ry),sn=Math.sin(ry),rxu=camX,cx1=Math.cos(rxu),sx1=Math.sin(rxu),PIV=-5;
+  ctx.clearRect(0,0,W,H);
+  // 影（地面にうっすら）
+  {const gy=(0.4+5)*Math.cos(camX)-5,gz=(0.4+5)*Math.sin(camX),k=30/(30+gz);ctx.globalAlpha=0.45;ctx.fillStyle=COL.rule;ctx.beginPath();ctx.ellipse(cx,cy+gy*unit*k,unit*3*k,unit*k*(0.45+Math.sin(camX)*2.4),0,0,7);ctx.fill();}
+  const L=cur.map((q,qi)=>{let [x,y,z]=q.p;const sp=reduce?0:spread[qi];if(sp>0.001&&gn){const h=Math.sin(qi*12.9898)*43758.5453,j=[(h%1),((h*7)%1),((h*13)%1)].map(v=>v-0.5);
+    x+=((x-gc[0])*0.55+j[0]*1.2)*sp;y+=((y-gc[1])*0.55+j[1]*1.2)*sp;z+=((z-gc[2])*0.55+j[2]*1.2)*sp}let X=x*cs-z*sn,Z=x*sn+z*cs;const yy=(y-PIV)*cx1-Z*sx1+PIV;Z=(y-PIV)*sx1+Z*cx1;y=yy;let [nx,ny,nz]=q.n;let NX=nx*cs-nz*sn,NZ=nx*sn+nz*cs;const nyy=ny*cx1-NZ*sx1;NZ=ny*sx1+NZ*cx1;ny=nyy;
+    const k=30/(30+Z);const lam=Math.abs(q.n[0]*LIGHT[0]+q.n[1]*LIGHT[1]+q.n[2]*LIGHT[2]);
+    let SX=cx+X*unit*k,SY=cy+y*unit*k;
+    if(!reduce){lastScr[qi]=[SX,SY];near[qi]=hV[qi];const dl=Math.hypot(dir[qi][0],dir[qi][1])||1,dx=dir[qi][0]/dl,dy=dir[qi][1]/dl,d=1;
+      if(near[qi]>0.002){const h=Math.sin(qi*78.233)*43758.5453,jx=(h%1)-0.5,jy=((h*3)%1)-0.5;const push=near[qi]*unit*1.9;
+        SX+=(dx/d+jx*0.3)*push;SY+=(dy/d+jy*0.3)*push}}
+    return {q,qi,X:SX,Y:SY,k,Z,lam}}).sort((a,b)=>b.Z-a.Z);
+  {let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const e of L){if(e.X<x0)x0=e.X;if(e.X>x1)x1=e.X;if(e.Y<y0)y0=e.Y;if(e.Y>y1)y1=e.Y}const pd=unit*0.4;box=[x0-pd,y0-pd,x1+pd,y1+pd]}
+  for(const e of L){const q=e.q;let s=unit*0.56*e.k,al=0.95;
+    if(hoverTag){if(q.tag===hoverTag){s*=1.15;al=0.95-0.35*spread[e.qi]}else al=0.4}
+    al*=1-0.3*near[e.qi];q.sx=e.X;q.sy=e.Y;ctx.globalAlpha=al;ctx.fillStyle=COL[q.c];rr(e.X,e.Y,s,s*0.34);ctx.fill();
+    // 光：当たる所は明るく抜け（種のつや）、当たらない所は少し沈む
+    if(e.lam>0.8){ctx.globalAlpha=al*Math.min(q.c==='main'?0.35:0.75,(e.lam-0.8)*4);ctx.fillStyle=q.c==='ink'?COL.rule:GROUND;rr(e.X,e.Y,s,s*0.34);ctx.fill()}
+    else if(e.lam<0.35){ctx.globalAlpha=al*(0.35-e.lam)*0.6;ctx.fillStyle=DARK;rr(e.X,e.Y,s,s*0.34);ctx.fill()}}
+  if(hoverTag){const m=cur.filter(q=>q.tag===hoverTag&&q.sx);if(m.length){const far=m.reduce((a,b)=>Math.abs(b.sx-cx)>Math.abs(a.sx-cx)?b:a);
+    const name=hoverTag[0]==='l'?['仮説 1','仮説 2','仮説 3'][+hoverTag[1]]:document.querySelector('[data-br="'+hoverTag.slice(1)+'"]').textContent;
+    note(far.sx,far.sy,far.sx<cx?-30:30,-30,name,hoverTag==='l1'||hoverTag==='b0'||hoverTag==='b2')}}
+  if(phase===5&&el>0.9&&!reduce){ctx.fillStyle=COL.sub;for(let i=0;i<16;i++){const life=((t/4200)+i*0.137)%1,ang=i*2.3+t/5000;
+    ctx.globalAlpha=(1-life)*0.7;ctx.beginPath();ctx.arc(cx+unit*0.4+Math.cos(ang)*(1+i%4)*0.6*unit,cy+(-7-life*5)*unit,2.5+(i%3),0,7);ctx.fill()}}
+  requestAnimationFrame(frame);
+}
+go(phaseNow());requestAnimationFrame(frame);
+
+// 事業内容の小さな図（立体の角）
+document.querySelectorAll('.ico').forEach(svg=>{
+  const k=+svg.dataset.k,NS='http://www.w3.org/2000/svg';const iso=(x,y,z)=>[36+(x-z)*11,40+(x+z)*6.4-y*12.5];
+  const cells=[];for(let x=0;x<3;x++)for(let y=0;y<3;y++)for(let z=0;z<3;z++)cells.push([x,y,z]);
+  cells.sort((a,b)=>(a[0]+a[2]-a[1])-(b[0]+b[2]-b[1]));
+  const col=['var(--sub)','var(--main)','var(--ink)'][k];
+  cells.forEach(([x,y,z],i)=>{const [X,Y]=iso(x,y,z);const r=document.createElementNS(NS,'rect');const hit=(i===(k*7+5)%27)||(i===(k*11+19)%27);
+    r.setAttribute('x',X-4.5);r.setAttribute('y',Y-4.5);r.setAttribute('width',9);r.setAttribute('height',9);r.setAttribute('rx',2.5);
+    r.setAttribute('fill',hit?col:'var(--rule)');svg.appendChild(r)});
+});
+})();
+</script>
+<!-- 来た人数を数える Cloudflare Web Analytics。トークンを CF_TOKEN に入れると有効になる（空のままなら何も読み込まない） -->
+<script>(function(){var CF_TOKEN='';if(!CF_TOKEN)return;var s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon',JSON.stringify({token:CF_TOKEN}));document.head.appendChild(s);})();</script>
+</body>
+</html>
