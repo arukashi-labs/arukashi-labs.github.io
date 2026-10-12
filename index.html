@@ -109,7 +109,7 @@ footer{padding-block:48px 16vh;border-top:1px solid var(--rule);font-size:13.5px
 </style>
 </head>
 <body>
-<div class="topwrap"><nav class="top"><b>Arukashi</b><a href="#work">仮説</a><a href="#likes"><span class="lg">興味のあるもの</span><span class="sm">興味</span></a><a href="#about">私について</a><a href="#contact">連絡先</a></nav></div>
+<div class="topwrap"><nav class="top"><b>Arukashi</b><a href="#about">私について</a><a href="#work">仮説</a><a href="#likes"><span class="lg">興味のあるもの</span><span class="sm">興味</span></a><a href="#contact">連絡先</a></nav></div>
 <div class="layout">
   <main>
     
@@ -117,6 +117,13 @@ footer{padding-block:48px 16vh;border-top:1px solid var(--rule);font-size:13.5px
       <div class="logo flip" tabindex="0" aria-label="Arukashi（あるかし）"><span class="face front">Arukashi<span class="dot">.</span></span><span class="face back" aria-hidden="true">あるかし<span class="dot">.</span></span></div>
       <p class="lead"><span class="nw">いまここにあるものを</span><span class="nw">大切にする。</span></p>
       <div class="scroll"><i></i>SCROLL</div>
+    </section>
+
+    <section class="sec reveal" id="about">
+      <span class="en">ABOUT</span><h2>私について</h2>
+      <div class="about">
+        <div class="about-text"><p><span class="nw">情報系出身の</span><span class="nw">エンジニアです。</span><br><span class="nw">モットーは</span><span class="nw">「問題は技術で</span><span class="nw">解決できる」。</span><br><span class="nw">なんにでも</span><span class="nw">興味を持てることが、</span><span class="nw">私の長所です。</span></p><p><span class="nw">お金だけじゃなく、</span><span class="nw">楽しいこと、</span><span class="nw">面白いこと、</span><span class="nw">驚かされること、</span><br><span class="nw">いろんなことを</span><span class="nw">味わいながら、</span><span class="nw">自分の仕事を</span><span class="nw">自分で作れるようになりたい。</span></p><p><span class="nw">まだ見ぬものが</span><span class="nw">世界をより良くすると信じて、</span><br><span class="nw">人と関わりながら、</span><span class="nw">ためになること、</span><span class="nw">価値のあることを</span><span class="nw">積み重ねていきます。</span></p></div>
+      </div>
     </section>
 
     <section class="sec reveal" id="work">
@@ -133,12 +140,7 @@ footer{padding-block:48px 16vh;border-top:1px solid var(--rule);font-size:13.5px
       <ul class="likes"><li class="hot" data-br="0">形式手法</li><li data-br="1">決定論と統計</li><li class="hot" data-br="2">構造化</li><li data-br="3">制度とルール</li><li data-br="4">料理の科学</li><li data-br="5">書くための機械</li><li data-br="6">デザイン</li></ul>
     </section>
 
-    <section class="sec reveal" id="about">
-      <span class="en">ABOUT</span><h2>私について</h2>
-      <div class="about">
-        <div class="about-text"><p><span class="nw">情報系出身の</span><span class="nw">エンジニアです。</span><br><span class="nw">モットーは</span><span class="nw">「問題は技術で</span><span class="nw">解決できる」。</span><br><span class="nw">なんにでも</span><span class="nw">興味を持てることが、</span><span class="nw">私の長所です。</span></p><p><span class="nw">お金だけじゃなく、</span><span class="nw">楽しいこと、</span><span class="nw">面白いこと、</span><span class="nw">驚かされること、</span><br><span class="nw">いろんなことを</span><span class="nw">味わいながら、</span><span class="nw">自分の仕事を</span><span class="nw">自分で作れるようになりたい。</span></p><p><span class="nw">まだ見ぬものが</span><span class="nw">世界をより良くすると信じて、</span><br><span class="nw">人と関わりながら、</span><span class="nw">ためになること、</span><span class="nw">価値のあることを</span><span class="nw">積み重ねていきます。</span></p></div>
-      </div>
-    </section>
+    
 
     <section class="sec reveal" id="contact">
       <span class="en">CONTACT</span><h2>連絡先</h2>
@@ -231,8 +233,9 @@ let W,H,DPR,phase=0,start=-1e9,hoverTag='';
 const cur=SH[0].map(q=>({p:[...q.p],n:[...q.n],c:q.c,tag:q.tag}));let fromP=cur.map(q=>[...q.p]),fromN=cur.map(q=>[...q.n]);
 function size(){DPR=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
 size();addEventListener('resize',size);
-const anchors=[document.querySelector('.hero'),document.querySelector('#work'),document.querySelector('#work .card:nth-child(2)'),document.querySelector('#likes'),document.querySelector('#about'),document.querySelector('#contact')];
-function phaseNow(){const mid=innerHeight*0.55;let k=0;anchors.forEach((e,i)=>{if(e.getBoundingClientRect().top<mid)k=i});return k}
+const anchors=[document.querySelector('.hero'),document.querySelector('#about'),document.querySelector('#work'),document.querySelector('#likes'),document.querySelector('#contact'),document.querySelector('footer')];
+function phaseNow(){const mid=innerHeight*0.55;let k=0;anchors.forEach((e,i)=>{if(e.getBoundingClientRect().top<mid)k=i});
+  if(scrollY+innerHeight>=document.documentElement.scrollHeight-8)k=anchors.length-1;return k}  // いちばん下まで来たら花
 function go(k){if(k===phase)return;fromP=cur.map(q=>[...q.p]);fromN=cur.map(q=>[...q.n]);phase=k;start=performance.now()}
 addEventListener('scroll',()=>go(phaseNow()),{passive:true});
 document.querySelectorAll('[data-leaf]').forEach(el=>{el.addEventListener('mouseenter',()=>hoverTag='l'+el.dataset.leaf);el.addEventListener('mouseleave',()=>hoverTag='')});
