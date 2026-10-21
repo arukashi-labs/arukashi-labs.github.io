@@ -327,6 +327,6 @@ document.querySelectorAll('.ico').forEach(svg=>{
 })();
 </script>
 <!-- 来た人数を数える Cloudflare Web Analytics。トークンを CF_TOKEN に入れると有効になる（空のままなら何も読み込まない） -->
-<script>(function(){var CF_TOKEN='320fdb5c616d4232bec61e8f1abc2ae0';if(!CF_TOKEN)return;var s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon',JSON.stringify({token:CF_TOKEN}));document.head.appendChild(s);})();</script>
+<script>(function(){var CF_TOKEN='320fdb5c616d4232bec61e8f1abc2ae0';if(!CF_TOKEN)return;try{if(location.search.indexOf('qz8m4t')>-1)localStorage.setItem('noTrack','1');if(localStorage.getItem('noTrack')==='1')return;}catch(e){}var s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon',JSON.stringify({token:CF_TOKEN}));document.head.appendChild(s);})();</script>
 </body>
 </html>
